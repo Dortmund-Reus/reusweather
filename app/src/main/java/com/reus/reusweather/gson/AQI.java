@@ -7,9 +7,9 @@ package com.reus.reusweather.gson;
 //当前空气质量状况
 public class AQI {
 
-    public AQIcity city;
+    public AQICity city;
 
-    public class AQIcity {
+    public class AQICity {
 
         public String aqi;
 

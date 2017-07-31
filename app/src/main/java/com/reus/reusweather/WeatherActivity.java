@@ -3,6 +3,7 @@ package com.reus.reusweather;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,41 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+//public class WeatherActivity extends AppCompatActivity {
+//
+//    private ScrollView weatherLayout;
+//
+//    private TextView titleCity;
+//
+//    private TextView titleUpdateTime;
+//
+//    //下面两个是now部分，显示当前气温和天气状况
+//    private TextView degreeText;
+//
+//    private TextView weatherInfoText;
+//
+//    private LinearLayout forecastLayout;                                        //未来天气预报的布局
+//
+//    private TextView aqiText;                                                   //显示AQI指数
+//
+//    private TextView pm25Text;                                                  //显示PM2.5指数
+//
+//    //下面三个是suggestion部分
+//    private TextView comfortText;                                               //
+//
+//    private TextView carWashText;
+//
+//    private TextView sportText;
+//
+
+//
+//
+
+//
+//}
 public class WeatherActivity extends AppCompatActivity {
+
+    public DrawerLayout drawerLayout;
 
     private ScrollView weatherLayout;
 
@@ -30,19 +65,17 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView titleUpdateTime;
 
-    //下面两个是now部分，显示当前气温和天气状况
     private TextView degreeText;
 
     private TextView weatherInfoText;
 
-    private LinearLayout forecastLayout;                                        //未来天气预报的布局
+    private LinearLayout forecastLayout;
 
-    private TextView aqiText;                                                   //显示AQI指数
+    private TextView aqiText;
 
-    private TextView pm25Text;                                                  //显示PM2.5指数
+    private TextView pm25Text;
 
-    //下面三个是suggestion部分
-    private TextView comfortText;                                               //
+    private TextView comfortText;
 
     private TextView carWashText;
 
@@ -85,8 +118,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     public void requestWeather(final String weatherId) {
 
-        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId +
-                "&key=aea131ae72fb49ae98d6e8fae6aad484";
+        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=aea131ae72fb49ae98d6e8fae6aad484";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
 
 
@@ -99,8 +131,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
-                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences
-                                    (WeatherActivity.this).edit();
+                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
                             editor.apply();
                             showWeatherInfo(weather);
@@ -126,13 +157,14 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * 处理并展示Weather实体类中的数据
      */
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];                  //得到小时:分格式的时间
-        String degree = weather.now.temprature + "℃";
+        String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
         titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime);
@@ -142,14 +174,14 @@ public class WeatherActivity extends AppCompatActivity {
         //上面的方法就是把layout容器中的的views视图都移除掉，这样子就得到了一个空layout容器。重新加载的时候，首先得移除原有的。
         for (Forecast forecast : weather.forecastList) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
-            TextView dateText = (TextView) findViewById(R.id.date_text);
-            TextView infoText = (TextView) findViewById(R.id.info_text);
-            TextView maxText = (TextView) findViewById(R.id.max_text);
-            TextView minText = (TextView) findViewById(R.id.min_text);
+            TextView dateText = (TextView) view.findViewById(R.id.date_text);
+            TextView infoText = (TextView) view.findViewById(R.id.info_text);
+            TextView maxText = (TextView) view.findViewById(R.id.max_text);
+            TextView minText = (TextView) view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
-            maxText.setText(forecast.temprature.max);
-            minText.setText(forecast.temprature.min);
+            maxText.setText(forecast.temperature.max);
+            minText.setText(forecast.temperature.min);
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
@@ -157,8 +189,8 @@ public class WeatherActivity extends AppCompatActivity {
             pm25Text.setText(weather.aqi.city.pm25);
         }
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
-        String carWash = "洗车指数：" + weather.suggestion.carwash;
-        String sport = "运动建议：" + weather.suggestion.sport.info;
+        String carWash = "洗车指数：" + weather.suggestion.carWash.info;
+        String sport = "运行建议：" + weather.suggestion.sport.info;
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);

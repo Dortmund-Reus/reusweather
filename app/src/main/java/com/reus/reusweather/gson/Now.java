@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class Now {
 
     @SerializedName("tmp")
-    public String temprature;                           //这个字段是温度
+    public String temperature;                           //这个字段是温度
 
     @SerializedName("cond")
     public More more;
