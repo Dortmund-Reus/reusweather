@@ -11,10 +11,30 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    productFlavors {
+        qihoo {
+            applicationId "com.reus.reusweather.qihoo"
+        }
+        baidu {
+            applicationId "com.reus.reusweather.baidu"
+        }
+    }
+    //签名配置
+    signingConfigs {
+        config {
+            storeFile file(KEY_PATH)
+            storePassword KEY_PASS
+            keyAlias ALIAS_NAME
+            keyPassword ALIAS_PASS
+        }
+    }
+
+    //编译类型
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config //加入签名配置
         }
     }
 }
